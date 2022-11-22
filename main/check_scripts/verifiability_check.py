@@ -24,19 +24,14 @@ unquantifiable = [
 ]
 
 
-def check_verifiability(content):
+def check_verifiability(sentences):
     res = []
-    sentences = re.split(r'\. |\? |! |\.|\?|!', content)
-    sentences = sentences[0:len(sentences)-1]
     for sentence in sentences:
-        ver = 1
+        vrf = 1
         words = sentence.split(' ')
         for word in words:
             if word in unquantifiable:
-                ver = 0
+                vrf = 0
                 break
-        res.append([sentence, ver])
+        res.append([sentence, vrf])
     return res
-
-# ress = check_verifiability("Hello! How are you? Yeah, I'm good! I hope the same for you.")
-# print(ress)
