@@ -117,8 +117,6 @@ implicitness = [
 # conjunctions : ['and', 'after', 'although', 'as long as', 'before', 'but', 'else', 'if', 'in order', 'in case', 'nor', 'or', 'otherwise', 'once', 'since', 'then', 'though', 'till', 'unless', 'until', 'when', 'whenever', 'where', 'whereas', 'wherever', 'while', 'yet']
 
 
-
-
 def is_vague(sentence):
     words = sentence.split(' ')
     for word in words:
@@ -148,10 +146,8 @@ def is_implicit(sentence):
     return False
 
 
-def check_ambiguity(content):
+def check_ambiguity(sentences):
     res = []
-    sentences = re.split(r'\. |\? |! |\.|\?|!', content)
-    sentences = sentences[0:len(sentences)-1]
     for sentence in sentences:
         vsoi = [0, 0, 0, 0]
         if is_vague(sentence):
@@ -164,6 +160,3 @@ def check_ambiguity(content):
             vsoi[3] = 1
         res.append([sentence, vsoi])
     return res
-
-ress = check_ambiguity("Hello! How are you? Yeah, I'm good! I hope the same for you.")
-print(ress)

@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect
 import json
 import requests
 from django.contrib import messages
-from main.check_scripts import *
-from main.check_scripts.rule_detector import detect_rules
+from main.check_scripts.rule_check import check_structure
+from main.check_scripts.ambiguity_check import check_ambiguity
+from main.check_scripts.verifiability_check import check_verifiability
 import re
 
 def query(API_TOKEN, payload='', parameters=None, options={'use_cache': False}):
@@ -17,7 +18,6 @@ def query(API_TOKEN, payload='', parameters=None, options={'use_cache': False}):
         return "Error:"+" ".join(response.json()['error'])
     else:
         return response.json()[0]['generated_text']
-
 
 def recommend(prompt_q, request):
     API_TOKEN = "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"
@@ -49,19 +49,22 @@ def index(request):
 
 def try_gpt(request):
     if request.method=="POST":        
-        prompt_q = request.POST["prompt"]             # few-shot prompt
+        prompt_q = request.POST["prompt"]
         sentences = re.split(r'\. |\? |! |\.|\?|!', prompt_q)
-        # structure_check_out = rd_out
-        print("rd_out ========== "+str(rd_out))
-        print(prompt_q)
-        print(len(rd_out))
-        for i in rd_out:
-            if i[2]=='passive voice':
-                messages.info(request, 'The input was found to be structurally incorrect.')
-                # input = recommend(prompt_q, request)
-            else:
-                messages.info(request, 'The input is structurally correct.')
-                # input = prompt_q
+        sentences = sentences[0:len(sentences)-1]
+        
+        struct_check_res = check_structure(sentences)
+        for i in struct_check_res:
+            print(i[1], i[0])
+        
+        amb_check_res = check_ambiguity(sentences)
+        for i in amb_check_res:
+            print(i[1], i[0])
+
+        vrf_check_res = check_verifiability(sentences)
+        for i in vrf_check_res:
+            print(i[1], i[0])
+        
         return render(request, 'index.html')
 
     else:
