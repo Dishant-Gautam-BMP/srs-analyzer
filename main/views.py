@@ -59,13 +59,29 @@ def try_gpt(request):
         
         amb_check_res = check_ambiguity(sentences)
         for i in amb_check_res:
-            print(i[1], i[0])
+            print(i[2], i[1], i[0])
 
         vrf_check_res = check_verifiability(sentences)
         for i in vrf_check_res:
             print(i[1], i[0])
         
-        return render(request, 'index.html')
+        final_res = {}
+        for i in range(len(struct_check_res)):
+            final_res[struct_check_res[i][0]] = {
+                    "struct": struct_check_res[i][1],
+                    "vagueness": amb_check_res[i][1][0],
+                    "subjectivity": amb_check_res[i][1][1],
+                    "optionality": amb_check_res[i][1][2],
+                    "implicitness": amb_check_res[i][1][3],
+                    "ambiguity": amb_check_res[i][2],
+                    "verifiability": vrf_check_res[i][1]
+                    }
+
+        params_to_front_end = {
+            "final_res": final_res
+        }
+        
+        return render(request, 'index.html', params_to_front_end)
 
     else:
         return render(request, 'index.html')
