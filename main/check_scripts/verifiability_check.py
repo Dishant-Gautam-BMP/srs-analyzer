@@ -2,6 +2,7 @@ import re
 
 unquantifiable = [
     'good',
+    'well',
     'adequate',
     'efficient',
     'enough',

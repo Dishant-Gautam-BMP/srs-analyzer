@@ -67,10 +67,32 @@
             </div>
         </form>
 
-        <font face="Candara" color="white" class="text-b">
-            {% for message in messages %}
-            {{ message }}<br>
-            {% endfor %}
+        <font face="calibri" color="white" class="text-b">
+            <table style="border: 1px solid white; padding: 10px">
+                <tr style="border: 1px solid white">
+                    <th style="padding:10px">Sentence</th>
+                    <th style="padding:10px">Structural Correctness</th>
+                    <th style="padding:10px">Vagueness</th>
+                    <th style="padding:10px">Subjectivity</th>
+                    <th style="padding:10px">Optionality</th>
+                    <th style="padding:10px">Implicitness</th>
+                    <th style="padding:10px">Ambiguity</th>
+                    <th style="padding:10px">Verifiability</th>
+                </tr>
+            
+                {% for sentence, res in final_res.items %}
+                <tr style="border: 1px solid white">
+                    <td style="padding:10px">{{ sentence }}</td>
+                    <td style="padding:10px">{{ res.struct }}</td>
+                    <td style="padding:10px">{{ res.vagueness }}</td>
+                    <td style="padding:10px">{{ res.subjectivity }}</td>
+                    <td style="padding:10px">{{ res.optionality }}</td>
+                    <td style="padding:10px">{{ res.implicitness }}</td>
+                    <td style="padding:10px">{{ res.ambiguity }}</td>
+                    <td style="padding:10px">{{ res.verifiability }}</td>
+                </tr>
+                {% endfor %}
+            </table>
         </font>
     </center>
 

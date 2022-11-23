@@ -150,13 +150,18 @@ def check_ambiguity(sentences):
     res = []
     for sentence in sentences:
         vsoi = [0, 0, 0, 0]
+        amb = 0
         if is_vague(sentence):
             vsoi[0] = 1
+            amb = 1
         elif is_subjective(sentence):
             vsoi[1] = 1
+            amb = 1
         elif is_optional(sentence):
             vsoi[2] = 1
+            amb = 1
         elif is_implicit(sentence):
             vsoi[3] = 1
-        res.append([sentence, vsoi])
+            amb = 1
+        res.append([sentence, vsoi, amb])
     return res
