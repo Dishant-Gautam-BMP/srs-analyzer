@@ -1,0 +1,150 @@
+A customer may cancel a transaction at any time; the transaction is terminated and the card is ejected. Active: A customer may cancel a transaction at any time; the system terminates the transaction and the card is ejected.
+###
+A transaction is initiated when a customer inserts an atm card into the card reader. Active: The system initiates a transaction when a customer inserts an atm card into the card reader.
+###
+After the successful validation of the pin/atm card, the user is given a selection of performing a withdrawal, query, or transfer. Active: After the successful validation of the pin/atm card, the system gives the user a selection of performing a withdrawal, query, or transfer.
+###
+Before a transfer transaction can be approved, the system determines that the customer has at least two accounts, that there are sufficient funds in the account to be debited. Active: Before the system can approve a transfer transaction, the system determines that the customer has at least two accounts, that there are sufficient funds in the account for debit.
+###
+Before a withdrawal transaction can be approved, the system determines that sufficient funds exist in the chosen account; the maximum daily will not exceed; and that there are sufficient funds at the local cash dispenser. Active: Before the system can approve a withdrawal transaction, the system determines that sufficient funds exist in the chosen account; the maximum daily will not exceed; and that there are sufficient funds at the local cash dispenser.
+###
+Cards that have been reported lost or stolen are also confiscated. Active: The system also confiscates cards that have been reportedly lost or stolen.
+###
+Complete cmo_information usecase is carried out. Active: The system carries out complete cmo_information usecase.
+###
+Customer enters login id with password, log-in usecase is carried out. Active: Customer enters login id with password, the system carries out the log-in usecase.
+###
+Customer selects to use the credit card which is stored in the system. Active: Customer selects to use the credit card which the system stores.
+###
+For approved transactions a receipt is printed. Active: The system prints a receipt for approved transactions.
+###
+For this, the system redirects to create family profile page and createfamilyprofile usecase is carried out. Active: For this, the system redirects to create family profile page and the system carries out the createfamilyprofile usecase.
+###
+Customer has to log in before placing an order, log-in usecase is carried out. Active: Customer has to be logged in before placing an order, the system carries out the log-in usecase.
+###
+The books should be stored in database. Active: The system must store the books in database.
+###
+If the card ’s magnetic strip is broken/not detectable, three times pin entered is wrong or the card is broken, then the card is confiscated. Active: If the card ’s magnetic strip is broken/not detectable, three times pin entered is wrong or the card is broken, then the system confiscates the card.
+###
+The marvel electronic store product web page should be loaded. Active: The system should load the marvel electronic store product web page.
+###
+Marvel e-store page should be loaded. Active: The system should load Marvel e-store page.
+###
+Members should be stored in the database. Active: The system should store members in the database.
+###
+Help facility is provided by the system to guide, helpfacility usecase is carried out.. Active: The system provides Help facility to guide, helpfacility usecase is carried out..
+###
+If admin selects to remove bus, then removebus usecase is carried out. Active: If admin selects to remove bus, then the system carries out the removebus usecase.
+###
+If all mandatory fields are not completed then an error message is occurred to complete the remaining mandatory fields to proceed. Active: If all mandatory fields are not completed then the system occurs an error message to complete the remaining mandatory fields to proceed.
+###
+If all mandatory fields are not completed then consumer is asked to complete them to proceed. Active: If all mandatory fields are not completed then the system asks the consumer to complete them to proceed.
+###
+If customer closes the window without proceeding for payment, then the cart is stored in the system for a pre-decided number of days so that the customer can return to the cart in the future. Active: If customer closes the window without proceeding for payment, then the system stores the cart in the system for a pre-decided number of days so that the customer can return to the cart in the future.
+###
+If customer is stuck in the process then he can use help facility to know how to fill the information, helpfacility usecase is carried out. Active: If customer is stuck in the process then he can use help facility to know how to fill the information, the system carries out the helpfacility usecase.
+###
+If he chooses this option then he is asked to enter details of all the selected flights. Active: If he chooses this option then the system asks him to enter details of all the selected flights.
+###
+If in the deletion process registrar decides not to delete the professor, then the delete operation is cancelled. Active: If in the deletion process registrar decides not to delete the professor, then the system cancels the delete operation.
+###
+If in the deletion process registrar decides not to delete the student, then the delete operation is cancelled. Active: If in the deletion process registrar decides not to delete the student, then the system cancels the delete operation.
+###
+If it is in progress, then a message is displayed to the registrar that the registration is in progress because the close registration processing can not be performed if registration is in progress. Active: If it is in progress, then the system desplays a message to the registrar that the registration is in progress because the system cannot perform the close registration processing if registration is in progress.
+###
+If no alternates are available, then no substitution will be made. Active: If no alternates are available, then the system will make no substitution.
+### 
+If no book is selected by the user then the system again asks user to select a book to reserve. Active: If the user selects no book then the system again asks user to select a book to reserve.
+###
+If no category is selected by the member then the system again asks user to select a category. Active: If the member selects no category then the system again asks user to select a category.
+###
+If no category is selected by the user then the system again asks user to select a category. Active: If the user selects no category then the system again asks user to select a category.
+###
+If no destination floor is selected by the user then the system asks the elevator to stay at the current floor. Active: If the user selects no destination floor then the system asks the elevator to stay at the current floor.
+###
+If no information is shown then the system asks caregiver to refresh the page. Active: If the system shows no information then the system asks caregiver to refresh the page.
+###
+If no receipt is printed then an error message is printed. Active: If the system prints no receipt then the system prints an error message.
+###
+If no subject is chosen by the student then the system asks student to select a subject again. Active: If the student chooses no subject then the system asks student to select a subject again.
+###
+If the consumer enters an invalid datahosting service provider database information then an error message is shown by the system. Active: If the consumer enters an invalid datahosting service provider database information then the system shows an error message.
+###
+If the consumer is not logged in with"create individual profile" then an error message is occurred. Active: If the consumer is not logged in with"create individual profile" then the system occurs an error message.
+###
+If the customer has forgotten his password then an email will be sent to his registered email id or he can also choose setting up a new password through message from the registered number. Active: If the customer has forgotten his password then the system will send an email to his registered email id or he can also choose setting up a new password through message from the registered number.
+###
+If the customer is not sure about how to proceed then he uses help facility, helpfacility usecase is carried out. Active: If the customer is not sure about how to proceed then he uses help facility, the system carries out the helpfacility usecase.
+###
+If the pin is entered incorrectly three times or the card is lost or stolen then the confiscatecard usecase is carried out. Active: If the pin is entered incorrectly three times or the card is lost or stolen then the system carries out the confiscatecard usecase.
+###
+If the pin is validated satisfactorily, the customer is prompted to choose a withdrawal, query, or transfer transaction. Active: If the pin is validated satisfactorily, the system prompts the customer to choose a withdrawal, query, or transfer transaction.
+###
+If the professor wishes to skip a particular student, the grade information can be left blank, filled in at a later time. Active: If the professor wishes to skip a particular student, they can leave the grade information, fill in at a later time.
+###
+If the schedule contains “ enrolled in ” course offerings, then the student is removed from the course offering. Active: If the schedule contains “ enrolled in ” course offerings, then the system removes the student from the course offering.
+###
+If the schedule does not have the maximum number of primary courses selected, the system attempts to select alternates from the schedule ’s list of alternates.. The first available alternate course offerings will be selected. Active: If the schedule does not have the maximum number of primary courses selected, the system attempts to select alternates from the schedule ’s list of alternates.. The system will select the first available alternate course offerings.
+###
+If the system can not find any grade information from the previous semester for the student then a message is displayed. Active: If the system can not find any grade information from the previous semester for the student then the system displays a message.
+###
+If the system is unable to retrieve the student ’s schedule then an error message is displayed. Active: If the system is unable to retrieve the student ’s schedule then the system displays an error message.
+###
+If the transaction is approved, the requested amount of cash is dispended, a receipt is printed containing information about the transaction, and the card is ejected. Active: If the transaction is approved, the system dispenses the requested amount of cash, prints a receipt containing information about the transaction, and ejects the card.
+###
+If the user presses the down-button, a down-elevator is requested. Active: If the user presses the down-button, the system requests a down-elevator.
+###
+If the user presses the up-button, an up-elevator is requested. Active: If the user presses the up-button, the system requests an up-elevator.
+###
+Once the transaction has completed, a receipt is printed, then the card is ejected. Active: Once the transaction has completed, the system prints a receipt, then the system ejects the card.
+###
+She is instructed to enter her uid and password in a secure web page and to create her individual profile. Active: The system instructs her to enter her uid and password in a secure web page and to create her individual profile.
+###
+Shopping cart contents is presented to the customer. Active: The system presents shopping cart contents to the customer.
+###
+System displays login page, log-in usecase is carried out. Active: System displays login page, the system carries out log-in usecase.
+###
+The admin selects to add bus, addbus usecase is carried out. Active: The admin selects to add bus, the system carries out addbus usecase.
+###
+The billing system is notified for each student in each course offering that is not cancelled, so the student can be billed for the course offering. Active: The system notifies the billing system for each student in each course offering that is not cancelled, so the student can be billed for the course offering.
+###
+The card is confiscated if the third attempt fails. Active: The system confiscates the card if the third attempt fails.
+###
+The card is ejected. Active: The system ejects the card.
+###
+The customer can use help facility to know how to fill the information, helpfacility usecase is carried out. Active: The customer can use help facility to know how to fill the information, the system carries out the helpfacility usecase.
+###
+The customer can use help facility, helpfacility usecase is carried out. Active: The customer can use help facility, the system carries out helpfacility usecase.
+###
+The customer is allowed three attempts to enter a correct pin. Active: The system allows the customer three attempts to enter a correct pin.
+###
+The help service can be invoked independently by the customer, which will provide him with a “ main ” help page. Active: The customer can independently invoke the help service, which will provide him with a “ main ” help page.
+###
+The professor is added to the system. Active: The system adds the professor to the system.
+###
+The student can also update or delete course selections if changes are made within the add/drop period at the beginning of the semester. Active: The student can also update or delete course selections if they make changes within the add/drop period at the beginning of the semester.
+###
+The student is added to the system. Active: The system adds the student to the system.
+###
+The supplier needs to log in, log-in usecase is carried out. Active: The supplier needs to log in, the system carries out log-in usecase.
+###
+The system also allows him to upload reports of the student which can be viewed by students. Active: The system also allows him to upload reports of the student which students can view.
+###
+The system confirms that the items are reserved to be delivered. Active: The system confirms that the system reserves items to be delivered.
+###
+The system informs the customer that the card has been confiscated. Active: The system informs the customer that the system has confiscated the card.
+###
+The system validates that the doors of the elevator are closed after the request is processed. Active: The system validates that the doors of the elevator are closed after the system processes the request.
+###
+The transaction is approved and the requested amount of cash is dispensed, and then control returns to the performtransaction usecase. Active: The system approves the transaction and the system dispenses the requested amount of cash, and then control returns to the performtransaction usecase.
+###
+The users are validated by the system. Active: The system validates the users.
+###
+Then completehome_information usecase is carried out. Active: Then the system carries out completehome_information usecase.
+###
+Then specifyservices usecase is carried out. Active: Then the system carries out specifyservices usecase.
+###
+To provide basic demographic information, the caregiver is redirected to completebasic-demographicinformation usecase. Active: To provide basic demographic information, the system redirects the caregiver to completebasic-demographicinformation usecase.
+###
+Whenever user presses a button, that button gets illuminated. Active: Whenever user presses a button, the system illuminates that button.
+###

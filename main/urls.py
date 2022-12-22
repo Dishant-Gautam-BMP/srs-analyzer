@@ -20,5 +20,5 @@ from main import views
 urlpatterns = [
     path('', views.root, name="root"),
     path('index', views.index, name='index'),
-    path('try_gpt', views.try_gpt, name='try_gpt')
+    path('analyze_reqs', views.analyze_reqs, name='analyze_reqs')
 ]

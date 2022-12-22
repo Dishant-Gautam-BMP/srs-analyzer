@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Requirements Analyzer</title>
+
+    <style>
+        table {
+            font-family: 'Gill Sans', 'Gill Sans MT', 'Calibri', 'Trebuchet MS', sans-serif;
+            color: black;
+            background-color: #C0C0C0;
+            border: 1px solid black;
+            padding: 10px;
+            margin: 32px 0 60px 0;
+            width: 80%;
+        }
+        tr {
+            border: 1px solid black;
+        }
+        th {
+            padding: 10px;
+            text-transform: uppercase;
+        }
+        td {
+            padding: 20px;
+        }
+        .correct {
+            background-color: #99FF99;
+        }
+        .incorrect {
+            background-color: #FF9999;
+        }
+        a {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+
+
+
+<body style="background-color: black">
+
+    <center>
+        <label class="block uppercase tracking-wide text-gray-100 text-xl font-bold mb-2" style="margin-top: 80px">
+            <a href="index">Requirements Analyzer</a>
+        </label>
+        <hr width=80%>
+
+        
+        <label class="block uppercase tracking-wide text-gray-100 text-xl font-bold mb-2" style="margin-top: 100px">
+            Requirements Analysis Report
+        </label>
+        
+        <table class="text-l">
+            <tr>
+                <th>Sentence</th>
+                <th>Vagueness</th>
+                <th>Subjectivity</th>
+                <th>Optionality</th>
+                <th>Implicitness</th>
+                <th>Ambiguity</th>
+                <th>Verifiability</th>
+                <th>Passive Voice</th>
+                <th>Recommendation</th>
+            </tr>
+        
+            {% for sentence, res in final_res.items %}
+                {% if res.verdict %}
+                    <tr class='correct'>
+                        <td>{{ sentence }}</td>
+                        <td>{{ res.vagueness }}</td>
+                        <td>{{ res.subjectivity }}</td>
+                        <td>{{ res.optionality }}</td>
+                        <td>{{ res.implicitness }}</td>
+                        <td>{{ res.ambiguity }}</td>
+                        <td>{{ res.verifiability }}</td>
+                        <td>{{ res.passive }}</td>
+                        <td>{{ res.rec }}</td>
+                    </tr>
+                {% else %}
+                    <tr class='incorrect'>
+                        <td>{{ sentence }}</td>
+                        <td>{{ res.vagueness }}</td>
+                        <td>{{ res.subjectivity }}</td>
+                        <td>{{ res.optionality }}</td>
+                        <td>{{ res.implicitness }}</td>
+                        <td>{{ res.ambiguity }}</td>
+                        <td>{{ res.verifiability }}</td>
+                        <td>{{ res.passive }}</td>
+                        <td>{{ res.rec }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+
+        <h4>
+            <u><a class="block uppercase tracking-wide text-gray-100 text-l font-bold mb-2" style="color: yellow;" href={{excel_url}}>Download results</a></u>
+        </h4>
+        <br><br>
+
+
+    </center>
+
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+</body>
+
+</html>
