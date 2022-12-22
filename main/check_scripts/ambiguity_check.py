@@ -117,51 +117,55 @@ implicitness = [
 # conjunctions : ['and', 'after', 'although', 'as long as', 'before', 'but', 'else', 'if', 'in order', 'in case', 'nor', 'or', 'otherwise', 'once', 'since', 'then', 'though', 'till', 'unless', 'until', 'when', 'whenever', 'where', 'whereas', 'wherever', 'while', 'yet']
 
 
-def is_vague(sentence):
-    words = sentence.split(' ')
+
+
+def is_vague(words):
+    res = [False, []]
     for word in words:
         if word in vagueness:
-            return True
-    return False
+            res[1].append(word)
+    if len(res[1])>0:
+        res[0] = True
+    return res
 
-def is_subjective(sentence):
-    words = sentence.split(' ')
+def is_subjective(words):
+    res = [False, []]
     for word in words:
         if word in subjectivity:
-            return True
-    return False
+            res[1].append(word)
+    if len(res[1])>0:
+        res[0] = True
+    return res
 
-def is_optional(sentence):
-    words = sentence.split(' ')
+def is_optional(words):
+    res = [False, []]
     for word in words:
         if word in optionality:
-            return True
-    return False
+            res[1].append(word)
+    if len(res[1])>0:
+        res[0] = True
+    return res
 
-def is_implicit(sentence):
-    words = sentence.split(' ')
+def is_implicit(words):
+    res = [False, []]
     for word in words:
         if word in implicitness:
-            return True
-    return False
-
-
-def check_ambiguity(sentences):
-    res = []
-    for sentence in sentences:
-        vsoi = [0, 0, 0, 0]
-        amb = 0
-        if is_vague(sentence):
-            vsoi[0] = 1
-            amb = 1
-        elif is_subjective(sentence):
-            vsoi[1] = 1
-            amb = 1
-        elif is_optional(sentence):
-            vsoi[2] = 1
-            amb = 1
-        elif is_implicit(sentence):
-            vsoi[3] = 1
-            amb = 1
-        res.append([sentence, vsoi, amb])
+            res[1].append(word)
+    if len(res[1])>0:
+        res[0] = True
     return res
+
+
+def check_ambiguity(sentence):
+    words = sentence.split(' ')
+    vsoi = [[], [], [], []]
+    vsoi[0] = is_vague(words)
+    vsoi[1] = is_subjective(words)
+    vsoi[2] = is_optional(words)
+    vsoi[3] = is_implicit(words)
+    if vsoi[0]==[False, []] and vsoi[1]==[False, []] and vsoi[2]==[False, []] and vsoi[3]==[False, []]:
+        return [False, vsoi]
+    return [True, vsoi]
+
+# ress = check_ambiguity("The software can be heavy or light.")
+# print(ress)

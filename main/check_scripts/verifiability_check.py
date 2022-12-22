@@ -2,14 +2,21 @@ import re
 
 unquantifiable = [
     'good',
-    'well',
     'adequate',
+    'adequatly',
     'efficient',
+    'efficiently',
     'enough',
     'sufficient',
+    'sufficiently',
+    'approximate',
     'approximately',
-    'nearly always',
+    'near',
+    'nearly',
+    'always',
+    'general',
     'generally',
+    'typical',
     'typically',
     'several',
     'to be defined',
@@ -18,21 +25,26 @@ unquantifiable = [
     'probably',
     'optionally',
     'adaptable',
+    'extensive',
     'extensible',
+    'easily',
     'easy',
+    'familiarly',
     'familiar',
-    'safe'
+    'safe',
+    'safely'
 ]
 
 
-def check_verifiability(sentences):
-    res = []
-    for sentence in sentences:
-        vrf = 1
-        words = sentence.split(' ')
-        for word in words:
-            if word in unquantifiable:
-                vrf = 0
-                break
-        res.append([sentence, vrf])
+def check_verifiability(sentence):
+    words = sentence.split(' ')
+    res = [True, []]
+    for word in words:
+        if word in unquantifiable:
+            res[1].append(word)
+    if len(res[1])>0:
+        res[0] = False
     return res
+
+# ress = check_verifiability("This must work efficiently")
+# print(ress)
