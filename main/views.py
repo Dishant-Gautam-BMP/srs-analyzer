@@ -1,3 +1,4 @@
+from cgitb import text
 from django.shortcuts import render, redirect
 import json
 import requests
@@ -13,6 +14,8 @@ from main.check_scripts.verifiability_check import check_verifiability
 from main.models import file_upload
 
 
+
+
 def query(API_TOKEN, payload='', parameters=None, options={'use_cache': False}):
     API_URL = "https://api-inference.huggingface.co/models/EleutherAI/gpt-neo-2.7B"
     headers = {"Authorization": f"Bearer {API_TOKEN}"}
@@ -24,6 +27,7 @@ def query(API_TOKEN, payload='', parameters=None, options={'use_cache': False}):
         return "Error:"+" ".join(response.json()['error'])
     else:
         return response.json()[0]['generated_text']
+
 
 def recommend(sentence):
     API_TOKEN = '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'
@@ -44,6 +48,7 @@ def recommend(sentence):
     # print("===================================================================================\n")
 
     return rec_out
+
 
 def analyze(sentences):
     final_res = {}
@@ -82,6 +87,7 @@ def analyze(sentences):
         }
     return final_res
 
+
 def generate_excel(res):
     wb_name = 'generated_workbooks/'+datetime.now().strftime("%Y-%m-%d_%H-%M-%S")+'.xlsx'
     wb = xlsxwriter.Workbook(wb_name)
@@ -115,38 +121,60 @@ def generate_excel(res):
     wb.close()
     return wb_name
 
+
 def read_latest_pdf():
     files_list = os.listdir('media')
     paths = [os.path.join('media', basename) for basename in files_list]
-    latest_file = ''
+    latest_file, srs = '', ''
     try:
         latest_file = max(paths, key=os.path.getctime)
+        srs = fitz.open(latest_file)
     except:
         return None
-    srs = fitz.open(latest_file)
     srs_content = ""
     for page in srs:
         srs_content += page.get_text()
     return srs_content
 
 
+
+
 def root(request):
     return redirect('index')
+
 
 def index(request):
     return render(request, 'index.html')
 
+
 def analyze_reqs(request):
     if request.method=="POST":
-        content = request.POST["prompt"]
+        text_content, pdf_content, content = '', None, ''
+        text_content = request.POST["prompt"]
         try:
             file = request.FILES["file"]
         except:
             file = None
+        
+        if file==None:
+            print(text_content)
+            if text_content!='':
+                content = text_content
+            else:
+                messages.info(request, 'No input detected!')
+                return render(request, 'index.html')
+
         if file is not None:
             doc = file_upload.objects.create(file=file)
             doc.save()
-            content = read_latest_pdf()
+            pdf_content = read_latest_pdf()
+            if pdf_content is None:
+                messages.info(request, 'Unsupported file format or empty file!')
+                return render(request, 'index.html')
+            content = pdf_content
+        else:
+            content = text_content
+
         sentences = re.split(r'\. |\? |! |\.|\?|!', content)
         sentences = sentences[0:len(sentences)-1]        
         final_res = analyze(sentences)
