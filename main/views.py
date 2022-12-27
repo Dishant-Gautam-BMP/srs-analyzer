@@ -1,4 +1,3 @@
-from cgitb import text
 from django.shortcuts import render, redirect
 import json
 import requests
@@ -56,7 +55,7 @@ def analyze(sentences):
         amb_check_res = check_ambiguity(sentence)
         vrf_check_res = check_verifiability(sentence)
         passive_check_res = check_passive(sentence)
-        vagueness, subjectivity, optionality, impliciteness, ambiguity, verifiability, passive, rec, verdict  = '-', '-', '-', '-', 'NO', 'YES', 'NO', '-', 1
+        vagueness, subjectivity, optionality, impliciteness, ambiguity, verifiability, voice, rec, verdict  = '-', '-', '-', '-', 'NO', 'YES', 'Active', '-', 1
         if amb_check_res[1][0][0]==True:
             vagueness = amb_check_res[1][0][1]
         if amb_check_res[1][1][0]==True:
@@ -70,9 +69,9 @@ def analyze(sentences):
         if vrf_check_res[0]==False:
             verifiability = 'NO due to ' + str(vrf_check_res[1])
         if passive_check_res==True:
-            passive = 'YES'
+            voice = 'Passive'
             rec = recommend(sentence)
-        if ambiguity!='NO' or verifiability!='YES' or passive=='YES':
+        if ambiguity!='NO' or verifiability!='YES' or voice=='YES':
             verdict = 0
         final_res[sentence] = {
             "vagueness": vagueness,
@@ -81,7 +80,7 @@ def analyze(sentences):
             "implicitness": impliciteness,
             "ambiguity": ambiguity,
             "verifiability": verifiability,
-            "passive": passive,
+            "passive": voice,
             "rec": rec,
             "verdict": verdict
         }
@@ -103,7 +102,7 @@ def generate_excel(res):
     ws.write(0, 4, 'Implicitness', header_cell_format)
     ws.write(0, 5, 'Ambiguity', header_cell_format)
     ws.write(0, 6, 'Verifiability', header_cell_format)
-    ws.write(0, 7, 'Passive Voice', header_cell_format)
+    ws.write(0, 7, 'Voice', header_cell_format)
     ws.write(0, 8, 'Recommendation', header_cell_format)
     i = 1
     for key, val in res.items():
