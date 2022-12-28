@@ -71,7 +71,7 @@ def analyze(sentences):
         if passive_check_res==True:
             voice = 'Passive'
             rec = recommend(sentence)
-        if ambiguity!='NO' or verifiability!='YES' or voice=='YES':
+        if ambiguity!='NO' or verifiability!='YES' or voice=='Passive':
             verdict = 0
         final_res[sentence] = {
             "vagueness": vagueness,

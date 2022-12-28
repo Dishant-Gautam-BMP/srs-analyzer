@@ -1,10 +1,7 @@
-import re
+from nltk.stem import WordNetLemmatizer
 
-vagueness = [
-    'a bit',
-    'a few',
-    'a little',
-    'able bodied',
+
+vagueness_words = [
     'about',
     'abundant',
     'accelerated',
@@ -25,10 +22,6 @@ vagueness = [
     'agile',
     'agreeable',
     'alike',
-    'all other',
-    'all the other',
-    'all-important',
-    'allow for',
     'almost',
     'alright',
     'amenable',
@@ -46,31 +39,14 @@ vagueness = [
     'appurtenant',
     'apropos',
     'apt',
-    'as applicable',
-    'as appropriate',
-    'as far as possible',
-    'as little as possible',
-    'as much as possible',
-    'as necessary',
-    'as possible',
-    'as required',
     'associable',
     'assumable',
-    'at best',
-    'at last',
-    'at least',
-    'at most',
-    'at worst',
     'available',
     'average',
     'await',
     'aweful',
     'bad',
-    'based on',
     'basic',
-    'be able to',
-    'be capable of',
-    'bear in mind',
     'becoming',
     'befitting',
     'believable',
@@ -79,11 +55,9 @@ vagueness = [
     'beneficial',
     'benign',
     'benignant',
-    'best possible',
     'biddable',
     'big',
     'binding',
-    'bit by bit',
     'blameless',
     'blur',
     'bordering',
@@ -91,28 +65,18 @@ vagueness = [
     'brisk',
     'bummer',
     'can',
-    'capability of',
-    'capability to',
     'capable',
-    'capable of',
     'cardinal',
     'carefree',
     'careless',
-    'certain degre',
-    'certain extent',
-    'certain level',
-    'certain point',
     'charitable',
     'cheap',
     'cheesy',
     'chief',
-    'child\'s play',
     'classy',
     'clear',
     'clear-cut',
     'clever',
-    'close to',
-    'close to',
     'cogent',
     'coherent',
     'comfortable',
@@ -162,9 +126,7 @@ vagueness = [
     'creeping',
     'crummy',
     'customary',
-    'cut out for',
     'dawdling',
-    'de rigueur',
     'deceivable',
     'decent',
     'decisive',
@@ -208,7 +170,6 @@ vagueness = [
     'energetic',
     'enough',
     'equal',
-    'equal to',
     'equivalently',
     'erroneous',
     'essential',
@@ -251,7 +212,6 @@ vagueness = [
     'favouring',
     'feasible',
     'felicitous',
-    'few and far between',
     'finally',
     'firm',
     'first-class',
@@ -295,25 +255,19 @@ vagueness = [
     'hale',
     'halfway',
     'handy',
-    'hard as nails',
     'hardy',
     'healthy',
     'heaps',
     'hearty',
     'heavy',
-    'heavy duty',
-    'helpful',
     'helpful',
     'hereafter',
     'honorable',
     'honourable',
     'hope',
-    'hot off the fire',
-    'hot off the press',
     'hypothetical',
     'icky',
     'ideal',
-    'if in case',
     'ill',
     'imaginable',
     'immeasurable',
@@ -324,13 +278,6 @@ vagueness = [
     'imperfect',
     'important',
     'imprecise',
-    'in addition',
-    'in character',
-    'in file feather',
-    'in general',
-    'in keeping',
-    'in line for',
-    'in the running',
     'inactive',
     'inadequate',
     'include',
@@ -353,13 +300,11 @@ vagueness = [
     'intelligent',
     'intelligible',
     'interest',
-    'invumbent on',
     'ipressive',
     'irreprehensible',
     'irreproachable',
     'jam-packed',
     'junky',
-    'just out',
     'justified',
     'knowable',
     'knowing',
@@ -373,11 +318,9 @@ vagueness = [
     'late',
     'latent',
     'latter',
-    'latter day',
     'lavish',
     'leaden',
     'lean',
-    'least possible',
     'legible',
     'legit',
     'leisurely',
@@ -399,7 +342,6 @@ vagueness = [
     'loose',
     'lot',
     'lotsa',
-    'loud enough',
     'lousy',
     'loyal',
     'lucent',
@@ -464,30 +406,16 @@ vagueness = [
     'newfanglend',
     'nice',
     'nimble',
-    'no end',
     'normal',
-    'not entirely',
-    'not fully',
-    'not good',
-    'not limited to',
-    'not many',
-    'not so good',
-    'not strictly',
-    'not too many',
-    'not wholly',
     'notably',
     'noticeably',
     'novel',
-    'number among',
     'obedient',
     'objectionable',
     'obligatory',
     'obtainable',
     'obvious',
     'occasional',
-    'of assistance',
-    'of service',
-    'of use',
     'off',
     'okay',
     'opportune',
@@ -498,7 +426,6 @@ vagueness = [
     'painless',
     'palpable',
     'paramount',
-    'part of',
     'particularly',
     'passable',
     'passive',
@@ -515,7 +442,6 @@ vagueness = [
     'petty',
     'phelegmatic',
     'piddling',
-    'piece of cake',
     'piecemeal',
     'plain',
     'plausibly',
@@ -567,7 +493,6 @@ vagueness = [
     'propitious',
     'prosperous',
     'proximately',
-    'prsent day',
     'pure',
     'purposive',
     'qualified',
@@ -625,7 +550,6 @@ vagueness = [
     'scant',
     'scanty',
     'scarce',
-    'scarcely any',
     'scattered',
     'scattering',
     'sctive',
@@ -641,7 +565,6 @@ vagueness = [
     'sharp',
     'short',
     'should',
-    'should have',
     'significant',
     'similar',
     'similarly',
@@ -660,7 +583,6 @@ vagueness = [
     'slipshod',
     'slothful',
     'slow',
-    'slow moving',
     'sluggish',
     'smallest',
     'smooth',
@@ -671,7 +593,6 @@ vagueness = [
     'sometimes',
     'somewhat',
     'soon',
-    'sooner or later',
     'sound',
     'sparse',
     'specific',
@@ -695,7 +616,6 @@ vagueness = [
     'strong',
     'stupendous',
     'sturdy',
-    'subject to',
     'submissive',
     'substandard',
     'substantial',
@@ -716,24 +636,15 @@ vagueness = [
     'swell',
     'swift',
     'symbolic',
-    'take care',
-    'take into account',
-    'take into consideration',
-    'taken care of',
-    'takes care',
     'talented',
     'tardy',
     'tenacious',
-    'the latest',
-    'then as well',
     'thereafter',
     'thin',
-    'think about',
     'thinkable',
     'thorough',
     'thus',
     'tiniest',
-    'to the point',
     'today',
     'tolerable',
     'too',
@@ -782,19 +693,13 @@ vagueness = [
     'unsuspicious',
     'untroublesome',
     'unyielding',
-    'up to',
-    'up to date',
-    'up to snuff',
-    'up tp',
     'urgent',
     'usable',
     'useful',
-    'user friendly',
     'utile',
     'valid',
     'valuable',
     'velocious',
-    'verging on',
     'very',
     'viable',
     'vigorous',
@@ -805,20 +710,13 @@ vagueness = [
     'wanted',
     'weighty',
     'well',
-    'well built',
-    'well founded',
-    'well made',
     'well-suited',
     'well-timed',
     'whatever',
     'wholesime',
     'wholesome',
-    'widely spaced',
     'wieldy',
     'will',
-    'within control',
-    'within limits',
-    'within reach',
     'wonderful',
     'workable',
     'worse',
@@ -827,19 +725,119 @@ vagueness = [
     'yielding'
 ]
 
-subjectivity = [
+vagueness_phrases = [
+    'a bit',
+    'a few',
+    'a little',
+    'able bodied',
+    'all other',
+    'all the other',
+    'all important',
+    'allow for',
+    'as applicable',
+    'as appropriate',
+    'as far as possible',
+    'as little as possible',
+    'as much as possible',
+    'as necessary',
+    'as possible',
+    'as required',
+    'at best',
+    'at last',
+    'at least',
+    'at most',
+    'at worst',
+    'based on',
+    'be able to',
+    'be capable of',
+    'bear in mind',
+    'best possible',
+    'bit by bit',
+    'capability of',
+    'capability to',
+    'capable of',
+    'certain degree',
+    'certain extent',
+    'certain level',
+    'certain point',
+    'child\'s play',
+    'close to',
+    'cut out for',
+    'de rigueur',
+    'equal to',
+    'few and far between',
+    'hard as nails',
+    'heavy duty',
+    'hot off the fire',
+    'hot off the press',
+    'if in case',
+    'in addition',
+    'in character',
+    'in file feather',
+    'in general',
+    'in keeping',
+    'in line for',
+    'in the running',
+    'invumbent on',
+    'just out',
+    'latter day',
+    'least possible',
+    'lots of',
+    'loud enough',
+    'no end',
+    'not entirely',
+    'not fully',
+    'not good',
+    'not limited to',
+    'not many',
+    'not so good',
+    'not strictly',
+    'not too many',
+    'not wholly',
+    'number among',
+    'of assistance',
+    'of service',
+    'of use',
+    'part of',
+    'piece of cake',
+    'prsent day',
+    'scarcely any',
+    'should have',
+    'slow moving',
+    'sooner or later',
+    'subject to',
+    'take care',
+    'take into account',
+    'take into consideration',
+    'taken care of',
+    'takes care',
+    'the latest',
+    'then as well',
+    'think about',
+    'to the point',
+    'up to',
+    'up to date',
+    'up to snuff',
+    'user friendly',
+    'verging on',
+    'well built',
+    'well founded',
+    'well made',
+    'widely spaced',
+    'within control',
+    'within limits',
+    'within reach',
+]
+
+subjectivity_words = [
     'agnate',
     'aim',
     'akin',
     'alike',
     'allied',
-    'allow for',
-    'allude to',
     'analogous',
-    'as possible',
     'await',
     'bad',
-    'bear in mind',
     'better',
     'bigger',
     'choice',
@@ -861,19 +859,13 @@ subjectivity = [
     'finer',
     'fitter',
     'furthermore',
-    'get at',
     'greater',
-    'having in mind',
-    'higher quality',
-    'hint at',
     'homogeneous',
     'hope',
     'identical',
     'ill',
     'imply',
     'improved',
-    'in addition',
-    'in agreement',
     'include',
     'indicate',
     'intend',
@@ -884,6 +876,42 @@ subjectivity = [
     'like',
     'look',
     'matching',
+    'parallel',
+    'poor',
+    'prederred',
+    'preferable',
+    'prominent',
+    'propose',
+    'reciprocal',
+    'related',
+    'resembling',
+    'same',
+    'sharpened',
+    'signify',
+    'similar',
+    'similarly',
+    'sophisticated',
+    'superior',
+    'surpassing',
+    'thus',
+    'too',
+    'twin',
+    'uniform',
+    'worse',
+    'worthier'
+]
+
+subjectivity_phrases = [
+    'allow for',
+    'allude to',
+    'as possible',
+    'bear in mind',
+    'get at',
+    'having in mind',
+    'higher quality',
+    'hint at',
+    'in addition',
+    'in agreement',
     'more appropriate',
     'more desirable',
     'more fitting',
@@ -894,56 +922,50 @@ subjectivity = [
     'much the same',
     'not so good',
     'number among',
-    'parallel',
-    'poor',
-    'prederred',
-    'preferable',
-    'prominent',
-    'propose',
-    'reciprocal',
     'refer to',
-    'related',
-    'resembling',
-    'same',
-    'sharpened',
-    'signify',
-    'similar',
-    'similarly',
-    'sophisticated',
     'souped up',
-    'superior',
-    'surpassing',
     'take into account',
     'take into consideration',
     'then as well',
-    'think about',
-    'thus',
-    'too',
-    'twin',
-    'uniform',
-    'worse',
-    'worthier'
+    'think about'
 ]
 
-optionality = [
+optionality_words = [
+    'avoidably',
+    'can',
+    'conceivably',
+    'eventually',
+    'finally',
+    'hereafter',
+    'likely',
+    'may',
+    'maybe',
+    'optionally',
+    'peradventure',
+    'perchnace',
+    'perhaps',
+    'possibly',
+    'probably',
+    'someday',
+    'sometime',
+    'ulimately',
+    'unessentially',
+    'uselessly'
+]
+
+optionality_phrases = [
     'after all',
     'at all',
     'at last',
     'at the end of the day',
-    'avoidably',
     'be allowed',
     'be authorized',
     'be permitted',
     'by any chance',
     'by any means',
-    'can',
     'can do',
     'could be',
-    'conceivably',
-    'eventually',
-    'finally',
     'god willing',
-    'hereafter',
     'if appropriate',
     'if in case',
     'if needed',
@@ -953,46 +975,28 @@ optionality = [
     'in the course of time',
     'in the end',
     'in the long run',
-    'likely',
-    'may',
-    'maybe',
     'not impossibly',
     'one day',
-    'optionally',
-    'peradventure',
-    'perchnace',
-    'perhaps',
-    'possibly',
-    'probably',
-    'someday',
-    'sometime',
     'sooner or later',
-    'ulimately',
-    'unessentially',
-    'uselessly',
     'when all is said and done',
     'within the realm of possibility'
 ]
 
-implicitness = [
-    'a certain',
-    'a particluar',
+implicitness_words = [
     'above',
     'abutting',
     'adherents',
     'adjacent',
-    'adjoining ',
+    'adjoining',
     'aforementioned',
     'after',
     'aloft',
     'alongside',
-    'already stated',
     'antecedent',
     'anterior',
     'atop',
     'attached',
     'audience',
-    'back to back',
     'below',
     'beneath',
     'beside',
@@ -1009,7 +1013,6 @@ implicitness = [
     'cortege',
     'coterie',
     'dependents',
-    'down from',
     'earlier',
     'ending',
     'ensuring',
@@ -1024,23 +1027,16 @@ implicitness = [
     'foregoing',
     'group',
     'groupies',
-    'hangers on',
-    'hard by',
     'here',
     'high',
     'it',
     'last',
-    'later ',
+    'later',
     'meeting',
     'nearest',
     'neighboring',
     'next',
     'omega',
-    'on high',
-    'on the side',
-    'on top of',
-    'one',
-    'one time',
     'over',
     'overhead',
     'past',
@@ -1054,9 +1050,8 @@ implicitness = [
     'raised',
     'retinue',
     'rout',
-    'side by side',
     'sometime',
-    'succeeding ',
+    'succeeding',
     'such',
     'suite',
     'superior',
@@ -1064,10 +1059,6 @@ implicitness = [
     'supporters',
     'termination',
     'that',
-    'the above mentioned',
-    'the indicated',
-    'the particular',
-    'the present',
     'these',
     'they',
     'this',
@@ -1078,59 +1069,109 @@ implicitness = [
     'upon'
 ]
 
+implicitness_phrases = [
+    'a certain',
+    'a particluar',
+    'already stated',
+    'back to back',
+    'down from',
+    'hangers on',
+    'hard by',
+    'on high',
+    'on the side',
+    'on top of',
+    'one time',
+    'side by side',
+    'the above mentioned',
+    'the indicated',
+    'the particular',
+    'the present',
+]
+
 # imperatives = ['shall', 'must', 'is required to', 'are applicable', 'are to', 'responsible for', 'will', 'should', 'could', 'would']
-# conjunctions : ['and', 'after', 'although', 'as long as', 'before', 'but', 'else', 'if', 'in order', 'in case', 'nor', 'or', 'otherwise', 'once', 'since', 'then', 'though', 'till', 'unless', 'until', 'when', 'whenever', 'where', 'whereas', 'wherever', 'while', 'yet']
+# conjunctions = ['and', 'after', 'although', 'as long as', 'before', 'but', 'else', 'if', 'in order', 'in case', 'nor', 'or', 'otherwise', 'once', 'since', 'then', 'though', 'till', 'unless', 'until', 'when', 'whenever', 'where', 'whereas', 'wherever', 'while', 'yet']
 
 
 
 
-def is_vague(words):
+lemmatizer = WordNetLemmatizer()
+
+def is_vague(words, lemmatized_words, sentence):
     res = [False, []]
-    for word in words:
-        if word in vagueness:
-            res[1].append(word)
+    for i in range(len(words)):
+        if words[i] in vagueness_words or lemmatized_words[i] in vagueness_words:
+            res[1].append(words[i])
+    for phrase in vagueness_phrases:
+        if phrase in sentence:
+            res[1].append(phrase)
     if len(res[1])>0:
         res[0] = True
     return res
 
-def is_subjective(words):
+def is_subjective(words, lemmatized_words, sentence):
     res = [False, []]
-    for word in words:
-        if word in subjectivity:
-            res[1].append(word)
+    for i in range(len(words)):
+        if words[i] in subjectivity_words or lemmatized_words[i] in subjectivity_words:
+            res[1].append(words[i])
+    for phrase in subjectivity_phrases:
+        if phrase in sentence:
+            res[1].append(phrase)
     if len(res[1])>0:
         res[0] = True
     return res
 
-def is_optional(words):
+def is_optional(words, lemmatized_words, sentence):
     res = [False, []]
-    for word in words:
-        if word in optionality:
-            res[1].append(word)
+    for i in range(len(words)):
+        if words[i] in optionality_words or lemmatized_words[i] in optionality_words:
+            res[1].append(words[i])
+    for phrase in optionality_phrases:
+        if phrase in sentence:
+            res[1].append(phrase)
     if len(res[1])>0:
         res[0] = True
     return res
 
-def is_implicit(words):
+def is_implicit(words, lemmatized_words, sentence):
     res = [False, []]
-    for word in words:
-        if word in implicitness:
-            res[1].append(word)
+    for i in range(len(words)):
+        if words[i] in implicitness_words or lemmatized_words[i] in implicitness_words:
+            res[1].append(words[i])
+    for phrase in implicitness_phrases:
+        if phrase in sentence:
+            res[1].append(phrase)
     if len(res[1])>0:
         res[0] = True
     return res
+
+
 
 
 def check_ambiguity(sentence):
     words = sentence.split(' ')
+    lemmatized_words = []
+    for word in words:
+        lemmatized_words.append(lemmatizer.lemmatize(word))
     vsoi = [[], [], [], []]
-    vsoi[0] = is_vague(words)
-    vsoi[1] = is_subjective(words)
-    vsoi[2] = is_optional(words)
-    vsoi[3] = is_implicit(words)
+    vsoi[0] = is_vague(words, lemmatized_words, sentence)
+    vsoi[1] = is_subjective(words, lemmatized_words, sentence)
+    vsoi[2] = is_optional(words, lemmatized_words, sentence)
+    vsoi[3] = is_implicit(words, lemmatized_words, sentence)
     if vsoi[0]==[False, []] and vsoi[1]==[False, []] and vsoi[2]==[False, []] and vsoi[3]==[False, []]:
         return [False, vsoi]
     return [True, vsoi]
 
 # ress = check_ambiguity("The software can be heavy or light.")
 # print(ress)
+
+
+
+
+
+
+
+
+
+
+
+
