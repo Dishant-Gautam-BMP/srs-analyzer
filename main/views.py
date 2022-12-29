@@ -11,6 +11,8 @@ from main.check_scripts.rule_check import check_passive
 from main.check_scripts.ambiguity_check import check_ambiguity
 from main.check_scripts.verifiability_check import check_verifiability
 from main.models import file_upload
+# from main.ambiguity import *
+# from main.verifiability import *
 
 
 
@@ -51,6 +53,15 @@ def recommend(sentence):
 
 def analyze(sentences):
     final_res = {}
+    detected = {
+        'Vague': [],
+        'Subjective': [],
+        'Optional': [],
+        'Implicit': [],
+        'Non-Verifiable': [],
+        'Passive': []
+    }
+    recommended = {}
     for sentence in sentences:
         amb_check_res = check_ambiguity(sentence)
         vrf_check_res = check_verifiability(sentence)
@@ -58,19 +69,25 @@ def analyze(sentences):
         vagueness, subjectivity, optionality, impliciteness, ambiguity, verifiability, voice, rec, verdict  = '-', '-', '-', '-', 'NO', 'YES', 'Active', '-', 1
         if amb_check_res[1][0][0]==True:
             vagueness = amb_check_res[1][0][1]
+            for word in vagueness: detected['Vague'].append(word)
         if amb_check_res[1][1][0]==True:
             subjectivity = amb_check_res[1][1][1]
+            for word in subjectivity: detected['Subjective'].append(word)
         if amb_check_res[1][2][0]==True:
             optionality = amb_check_res[1][2][1]
+            for word in optionality: detected['Optional'].append(word)
         if amb_check_res[1][3][0]==True:
             impliciteness = amb_check_res[1][3][1]
+            for word in impliciteness: detected['Implicit'].append(word)
         if amb_check_res[0]==True:
             ambiguity = 'YES'
         if vrf_check_res[0]==False:
             verifiability = 'NO due to ' + str(vrf_check_res[1])
+            for word in vrf_check_res[1]: detected['Non-Verifiable'].append(word)
         if passive_check_res==True:
             voice = 'Passive'
             rec = recommend(sentence)
+            recommended[sentence] = rec
         if ambiguity!='NO' or verifiability!='YES' or voice=='Passive':
             verdict = 0
         final_res[sentence] = {
@@ -84,7 +101,10 @@ def analyze(sentences):
             "rec": rec,
             "verdict": verdict
         }
-    return final_res
+        for key, value in detected.items():
+            value = set(value)
+        detected['Rec'] = recommended
+    return final_res, detected
 
 
 def generate_excel(res):
@@ -106,7 +126,10 @@ def generate_excel(res):
     ws.write(0, 8, 'Recommendation', header_cell_format)
     i = 1
     for key, val in res.items():
-        ws.write(i, 0, key)
+        if val['verdict']==1:
+            ws.write(i, 0, key, correct_cell_format)
+        else:
+            ws.write(i, 0, key, incorrect_cell_format)
         j = 1
         for k, v in val.items():
             if j==9:
@@ -121,19 +144,75 @@ def generate_excel(res):
     return wb_name
 
 
-def read_latest_pdf():
+def find_latest_pdf():
     files_list = os.listdir('media')
     paths = [os.path.join('media', basename) for basename in files_list]
-    latest_file, srs = '', ''
     try:
-        latest_file = max(paths, key=os.path.getctime)
-        srs = fitz.open(latest_file)
+        return max(paths, key=os.path.getctime)
     except:
         return None
+    return None
+
+
+def read_pdf():
+    latest_file = find_latest_pdf()
+    srs = fitz.open(latest_file)
     srs_content = ""
     for page in srs:
         srs_content += page.get_text()
     return srs_content
+
+
+def annotate_pdf(detected):
+    print(detected)
+    print('Annotating PDF.......')
+    latest_file = find_latest_pdf()
+    srs = fitz.open(latest_file)
+    for pg, page in enumerate(srs):
+        for key, value in detected.items():
+            if key=='Rec':
+                for sentence, rec in value.items():
+                    matched_values = page.search_for(sentence)
+                    # print(matched_values)
+                    for item in matched_values:
+                        annot = page.add_underline_annot(item)
+                        annot.set_colors({"stroke":(1,0,0)})
+                        info = annot.info
+                        info["title"]   = 'Passive Voice'
+                        info["content"] = 'Active-voice Recommendation: '+rec
+                        annot.set_info(info)
+                        annot.update()
+            else:
+                for item in value:
+                    matched_values = page.search_for(' '+item+' ')
+                    matched_values + page.search_for(' '+item+'.')
+                    matched_values + page.search_for(' '+item+',')
+                    matched_values + page.search_for(' '+item+'?')
+                    matched_values + page.search_for(' '+item+'!')
+                    # print(matched_values)
+                    for item in matched_values:
+                        annot = page.add_rect_annot(item)
+                        annot.set_border({"dashes":[],"width":1})
+                        if key=='Vague':
+                            annot.set_colors({"stroke":(0,0,1)})
+                        elif key=='Subjective':
+                            annot.set_colors({"stroke":(0.6,0.3,0)})
+                        elif key=='Optional':
+                            annot.set_colors({"stroke":(1,0,1)})
+                        elif key=='Implicit':
+                            annot.set_colors({"stroke":(1,0.6,0)})
+                        elif key=='Non-Verifiable':
+                            annot.set_colors({"stroke":(0.6,0,1)})
+                        info = annot.info
+                        info["title"]   = key
+                        info["content"] = 'This word makes the sentence '+key.lower()+'.'
+                        annot.set_info(info)
+                        annot.update()
+    annotated_pdf = latest_file[0:len(latest_file)-4]+'_annotated.pdf'
+    srs.save(annotated_pdf, garbage=3, deflate=True)
+    srs.close()
+    print('Completed annotating PDF.......')
+    return annotated_pdf
 
 
 
@@ -166,7 +245,7 @@ def analyze_reqs(request):
         if file is not None:
             doc = file_upload.objects.create(file=file)
             doc.save()
-            pdf_content = read_latest_pdf()
+            pdf_content = read_pdf()
             if pdf_content is None:
                 messages.info(request, 'Unsupported file format or empty file!')
                 return render(request, 'index.html')
@@ -174,15 +253,18 @@ def analyze_reqs(request):
         else:
             content = text_content
 
-        
+
         sentences = re.split(r'\. |\? |! |\.|\?|!', content)
         sentences = sentences[0:len(sentences)-1]
-        final_res = analyze(sentences)
+        final_res, detected = analyze(sentences)
         excel_url = generate_excel(final_res)
+        annotated_pdf_url = ''
+        if pdf_content!='': annotated_pdf_url = annotate_pdf(detected)
 
         params_to_front_end = {
             "final_res": final_res,
-            "excel_url": excel_url
+            "excel_url": excel_url,
+            "annotated_pdf_url": annotated_pdf_url
         }
         return render(request, 'output.html', params_to_front_end)
 
