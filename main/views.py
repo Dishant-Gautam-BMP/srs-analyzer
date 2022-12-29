@@ -174,8 +174,9 @@ def analyze_reqs(request):
         else:
             content = text_content
 
+        
         sentences = re.split(r'\. |\? |! |\.|\?|!', content)
-        sentences = sentences[0:len(sentences)-1]        
+        sentences = sentences[0:len(sentences)-1]
         final_res = analyze(sentences)
         excel_url = generate_excel(final_res)
 

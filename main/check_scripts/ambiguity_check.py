@@ -1,4 +1,6 @@
+import re
 from nltk.stem import WordNetLemmatizer
+
 
 
 vagueness_words = [
@@ -1102,7 +1104,7 @@ def is_vague(words, lemmatized_words, sentence):
         if words[i] in vagueness_words or lemmatized_words[i] in vagueness_words:
             res[1].append(words[i])
     for phrase in vagueness_phrases:
-        if phrase in sentence:
+        if re.search(' '+phrase+' ', sentence) or re.search('^'+phrase, sentence) or re.search(phrase+'$', sentence):
             res[1].append(phrase)
     if len(res[1])>0:
         res[0] = True
@@ -1114,7 +1116,7 @@ def is_subjective(words, lemmatized_words, sentence):
         if words[i] in subjectivity_words or lemmatized_words[i] in subjectivity_words:
             res[1].append(words[i])
     for phrase in subjectivity_phrases:
-        if phrase in sentence:
+        if re.search(' '+phrase+' ', sentence) or re.search('^'+phrase, sentence) or re.search(phrase+'$', sentence):
             res[1].append(phrase)
     if len(res[1])>0:
         res[0] = True
@@ -1126,7 +1128,7 @@ def is_optional(words, lemmatized_words, sentence):
         if words[i] in optionality_words or lemmatized_words[i] in optionality_words:
             res[1].append(words[i])
     for phrase in optionality_phrases:
-        if phrase in sentence:
+        if re.search(' '+phrase+' ', sentence) or re.search('^'+phrase, sentence) or re.search(phrase+'$', sentence):
             res[1].append(phrase)
     if len(res[1])>0:
         res[0] = True
@@ -1138,7 +1140,7 @@ def is_implicit(words, lemmatized_words, sentence):
         if words[i] in implicitness_words or lemmatized_words[i] in implicitness_words:
             res[1].append(words[i])
     for phrase in implicitness_phrases:
-        if phrase in sentence:
+        if re.search(' '+phrase+' ', sentence) or re.search('^'+phrase, sentence) or re.search(phrase+'$', sentence):
             res[1].append(phrase)
     if len(res[1])>0:
         res[0] = True
@@ -1148,6 +1150,7 @@ def is_implicit(words, lemmatized_words, sentence):
 
 
 def check_ambiguity(sentence):
+    sentence = sentence.lower()
     words = sentence.split(' ')
     lemmatized_words = []
     for word in words:

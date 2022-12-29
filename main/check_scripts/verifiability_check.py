@@ -1,3 +1,4 @@
+import re
 from nltk.stem import WordNetLemmatizer
 
 
@@ -421,7 +422,7 @@ def check_verifiability(sentence):
         if words[i] in unquantifiable_words or lemmatized_words[i] in unquantifiable_words:
             res[1].append(words[i])
     for phrase in unquantifiable_phrases:
-        if phrase in sentence:
+        if re.search(' '+phrase+' ', sentence) or re.search('^'+phrase, sentence) or re.search(phrase+'$', sentence):
             res[1].append(phrase)
     if len(res[1])>0:
         res[0] = False
