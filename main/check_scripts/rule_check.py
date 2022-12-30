@@ -1,44 +1,46 @@
-#importing libraries 
 import nltk
-import re
 import spacy
 from spacy.matcher import Matcher
-from nltk.tokenize import sent_tokenize
 nltk.download('punkt')
 nlp = spacy.load('en_core_web_sm')
 
 
-rule_1=['nsubj','iobj','dobj']
-rule_2=['nsubj','dobj','mark','nsubj']
-rule_3=['nsubj','mark','nsubj']
-rule_4=['nsubj','neg','mark','xcomp','dobj']
-rule_5=['nsubj','dobj','acl']
-rule_6=['nsubj','dobj','acl']
-rule_7=['nsubj','dobj','advmod']
-rule_8=['nsubj','dobj','case','nmod']
-rule_9=['nsubj','advmod','mark','xcomp']
-rule_10=['nsubj','advmod','nsubj','advcl']
-rule_11=['nsubj','mark','xcomp']
-rule_12=['nsubj','xcomp']
-rule_13=['nsubj','advmod']
-rule_14=['nsubj','attr']
-rule_15=['nsubj','case','nummod','nmod']
-rule_16=['nsubjpass','auxpass','case','nmod']
-rule_17=['nsubj','dobj']
-rule_18=['nsubj'] 
-rule_19=['nsubj','case','nmod']
-rule_20=['mark'] 
-rule_21=['nsubj','dobj','neg','mark','acl']
-rule_22=['nsubj','dobj','mark','attr','xcomp']
-rule_23=['nsubj','dobj','mark','acl']
-rule_24=['nsubj','nsubj','xcomp']
-rule_25=['nsubj','dobj','advmod','mark','xcomp']
-rule_26=['advmod','mark'] 
-rule_27=['nsubjpass','aux','auxpass','ROOT','case','nmod']
-rule_28=['nsubj','ROOT','dobj']
-rule_29=['nsubj','ROOT','dobj','pobj']
-rule_30=['nsubj','ROOT','pobj']
-rule_31=['nsubj','ROOT','dobj','dobj']
+
+
+rule_1  = ['nsubj','iobj','dobj']
+rule_2	= ['nsubj','dobj','mark','nsubj']
+rule_3	= ['nsubj','mark','nsubj']
+rule_4	= ['nsubj','neg','mark','xcomp','dobj']
+rule_5	= ['nsubj','dobj','acl']
+rule_6	= ['nsubj','dobj','acl']
+rule_7	= ['nsubj','dobj','advmod']
+rule_8	= ['nsubj','dobj','case','nmod']
+rule_9	= ['nsubj','advmod','mark','xcomp']
+rule_10	= ['nsubj','advmod','nsubj','advcl']
+rule_11	= ['nsubj','mark','xcomp']
+rule_12	= ['nsubj','xcomp']
+rule_13	= ['nsubj','advmod']
+rule_14	= ['nsubj','attr']
+rule_15	= ['nsubj','case','nummod','nmod']
+rule_16	= ['nsubjpass','auxpass','case','nmod']
+rule_17	= ['nsubj','dobj']
+rule_18	= ['nsubj'] 
+rule_19	= ['nsubj','case','nmod']
+rule_20	= ['mark'] 
+rule_21	= ['nsubj','dobj','neg','mark','acl']
+rule_22	= ['nsubj','dobj','mark','attr','xcomp']
+rule_23	= ['nsubj','dobj','mark','acl']
+rule_24	= ['nsubj','nsubj','xcomp']
+rule_25	= ['nsubj','dobj','advmod','mark','xcomp']
+rule_26	= ['advmod','mark'] 
+rule_27	= ['nsubjpass','aux','auxpass','ROOT','case','nmod']
+rule_28	= ['nsubj','ROOT','dobj']
+rule_29	= ['nsubj','ROOT','dobj','pobj']
+rule_30	= ['nsubj','ROOT','pobj']
+rule_31	= ['nsubj','ROOT','dobj','dobj']
+
+
+
 
 def printer(line,t,rule):
   ans=""
@@ -64,6 +66,7 @@ def printer(line,t,rule):
     ans=""
     return ans
 
+
 def is_passive(sentence):
     doc = nlp(sentence)
     matcher = Matcher(nlp.vocab)
@@ -74,6 +77,7 @@ def is_passive(sentence):
         return True
     else:
         return False
+
 
 def sentence_partition(inp,td,tag):
     st=inp[td.index(tag):td.index('cc')]
@@ -87,8 +91,10 @@ def sentence_partition(inp,td,tag):
     temp+="."
     return temp
 
+
 def conjuction_checker(inp):
     return any(['cc' in inp])
+
 
 def matcher(rule,inp):
     i=0
@@ -100,6 +106,7 @@ def matcher(rule,inp):
         else:
             j=j+1
     return i==len(rule)
+
 
 def matcher2(rule,inp,pos_list,pos_tag):
     flag=False
@@ -115,20 +122,14 @@ def matcher2(rule,inp,pos_list,pos_tag):
             j=j+1
     return (flag and i==len(rule))
 
+
+
+
 def detect_rules(sentence):
     sentence = sentence.lower()
-    #tokenization
-    # list_of_sentences = nltk.sent_tokenize(temp_text)
-    #cleaning all the sentences 
-    # list_of_cleaned_text = []
-    # for sentence in list_of_sentences:
-        # cleaned_text = re.sub('[^a-zA-Z]', ' ',sentence)
-        # cleaned_text = re.sub('\s+', ' ', cleaned_text)
-        # list_of_cleaned_text.append(sentence)
-    
     TDs_text = []
-    # for sentence in list_of_cleaned_text:
     temp = nlp(sentence)
+    
     t = []
     for i in temp:
         t.append([i.text,i.pos_ ,i.dep_])
@@ -409,15 +410,13 @@ def detect_rules(sentence):
 
 def check_passive(sentence):
     res = []
-    # sentences = re.split(r'\. |\? |! |\.|\?|!', content)
-    # sentences = sentences[0:len(sentences)-1]
-    # for sentence in sentences:
     judgement = detect_rules(sentence)
     if(judgement[0][2]=='passive voice'):
         res = 1
     else:
         res = 0
     return res
+
 
 # ress = check_passive('This sentence is being typed in passive voice!')
 # print(ress)

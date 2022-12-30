@@ -3,6 +3,7 @@ from nltk.stem import WordNetLemmatizer
 
 
 
+
 vagueness_words = [
     'about',
     'abundant',
@@ -1161,15 +1162,3 @@ def check_ambiguity(sentence):
 
 # ress = check_ambiguity("The software can be heavy or light.")
 # print(ress)
-
-
-
-
-
-
-
-
-
-
-
-
