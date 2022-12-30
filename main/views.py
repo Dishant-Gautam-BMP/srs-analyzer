@@ -236,6 +236,10 @@ def index(request):
     return render(request, 'index.html')
 
 
+def input(request):
+    return render(request, 'input.html')
+
+
 def analyze_reqs(request):
     if request.method=="POST":
         text_content, pdf_content, content, input_pdf_file_name = '', None, '', ''
@@ -246,7 +250,6 @@ def analyze_reqs(request):
             file = None
         
         if file==None:
-            print(text_content)
             if text_content!='':
                 content = text_content
             else:
@@ -272,7 +275,7 @@ def analyze_reqs(request):
         final_res, detected = analyze(sentences)
         excel_url = generate_excel(final_res, input_pdf_file_name)
         annotated_pdf_url = ''
-        if pdf_content!='': annotated_pdf_url = annotate_pdf(detected, input_pdf_file_name)
+        if pdf_content!=None: annotated_pdf_url = annotate_pdf(detected, input_pdf_file_name)
 
         params_to_front_end = {
             "final_res": final_res,
