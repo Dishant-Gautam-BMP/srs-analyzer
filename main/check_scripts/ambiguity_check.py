@@ -3,6 +3,7 @@ from nltk.stem import WordNetLemmatizer
 
 
 
+
 vagueness_words = [
     'about',
     'abundant',
@@ -987,48 +988,41 @@ optionality_phrases = [
 implicitness_words = [
     'above',
     'abutting',
-    'adherents',
     'adjacent',
     'adjoining',
     'aforementioned',
     'after',
+    'afterward',
     'aloft',
     'alongside',
     'antecedent',
     'anterior',
     'atop',
     'attached',
-    'audience',
     'below',
     'beneath',
     'beside',
     'beyond',
-    'circle',
-    'clientage',
-    'clientele',
     'close',
     'coming',
     'completion',
     'conclusion',
+    'consecutive',
     'consequent',
+    'consequential',
     'conterminous',
-    'cortege',
-    'coterie',
-    'dependents',
+    'down',
     'earlier',
     'ending',
+    'ensuing',
     'ensuring',
-    'entourage',
     'erstwhile',
     'ex',
-    'fans',
     'finale',
     'finis',
     'finish',
     'following',
     'foregoing',
-    'group',
-    'groupies',
     'here',
     'high',
     'it',
@@ -1042,29 +1036,27 @@ implicitness_words = [
     'over',
     'overhead',
     'past',
-    'patronage',
-    'patrons',
     'precedent',
     'preceding',
     'previous',
     'proximate',
-    'public',
+    'pursuing',
     'raised',
-    'retinue',
-    'rout',
+    'sequential',
+    'seriate',
     'sometime',
+    'subsequent',
     'succeeding',
+    'successive',
     'such',
-    'suite',
     'superior',
-    'support',
-    'supporters',
+    'supervenient',
     'termination',
     'that',
     'these',
     'they',
     'this',
-    'those',
+    'those',	
     'touching',
     'under',
     'underneath',
@@ -1074,20 +1066,24 @@ implicitness_words = [
 implicitness_phrases = [
     'a certain',
     'a particluar',
+    'a while later',
+    'after a while',
     'already stated',
     'back to back',
     'down from',
-    'hangers on',
     'hard by',
+    'in pursuit',
+    'in the wake of',
+    'later on',
+    'next off',
     'on high',
     'on the side',
     'on top of',
-    'one time',
     'side by side',
     'the above mentioned',
     'the indicated',
     'the particular',
-    'the present',
+    'the present'
 ]
 
 # imperatives = ['shall', 'must', 'is required to', 'are applicable', 'are to', 'responsible for', 'will', 'should', 'could', 'would']
@@ -1166,15 +1162,3 @@ def check_ambiguity(sentence):
 
 # ress = check_ambiguity("The software can be heavy or light.")
 # print(ress)
-
-
-
-
-
-
-
-
-
-
-
-
