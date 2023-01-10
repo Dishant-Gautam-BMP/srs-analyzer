@@ -254,15 +254,17 @@ def analyze_reqs(request):
                 content = text_content
             else:
                 messages.info(request, 'No input detected!')
-                return render(request, 'index.html')
+                return render(request, 'input.html')
 
         if file is not None:
             doc = file_upload.objects.create(file=file)
             doc.save()
-            pdf_content, input_pdf_file_name = read_pdf()
-            if pdf_content is None:
-                messages.info(request, 'Unsupported file format or empty file!')
-                return render(request, 'index.html')
+            pdf_content, input_pdf_file_name = '', ''
+            try:
+                pdf_content, input_pdf_file_name = read_pdf()
+            except:
+                messages.info(request, 'Incorrect file format! Please upload PDF file only.')
+                return render(request, 'input.html')
             content = pdf_content
         else:
             content = text_content
