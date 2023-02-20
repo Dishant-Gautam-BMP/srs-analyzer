@@ -210,7 +210,7 @@ def analyze_reqs(request):
         sentences = sentences[0:len(sentences)-1]
         print('[Checkpoint-----1]: Requirements content ready.')
 
-        chunk_length = 10
+        chunk_length = 100
         sliced_input = [slice for slice in more_itertools.batched(sentences, chunk_length)]
         print(f"[Checkpoint-----2]: Input sliced into {len(sliced_input)} data chunks. Each data chunk contains at max {chunk_length} sentences.")
 
