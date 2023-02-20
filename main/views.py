@@ -1,4 +1,4 @@
-import json, requests, os, re, xlsxwriter, fitz
+import json, os, re, xlsxwriter, fitz
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -6,6 +6,8 @@ from main.check_scripts.rule_check import check_passive
 from main.check_scripts.ambiguity_check import check_ambiguity
 from main.check_scripts.verifiability_check import check_verifiability
 from main.models import file_upload
+from main.multi_proc import run_multi_proc
+import more_itertools
 
 
 
@@ -42,71 +44,6 @@ def recommend(sentence):
     return rec_out
 
 
-# Execution logic: Method for lemmatization, ambiguity check, verifiability check, passive-voice check, and recommendations.
-def analyze(sentences):
-    print('Analyzing requirements.....')
-    
-    final_res = {}
-    detected = {
-        'Vague': [],
-        'Subjective': [],
-        'Optional': [],
-        'Implicit': [],
-        'Non-Verifiable': [],
-        'Passive': []
-    }
-    recommended = {}
-    
-    for sentence in sentences:
-        amb_check_res = check_ambiguity(sentence)
-        vrf_check_res = check_verifiability(sentence)
-        passive_check_res = check_passive(sentence)
-        
-        vagueness, subjectivity, optionality, impliciteness, ambiguity, verifiability, voice, rec, verdict  = '-', '-', '-', '-', 'NO', 'YES', 'Active', '-', 1
-        if amb_check_res[1][0][0]==True:
-            vagueness = amb_check_res[1][0][1]
-            for word in vagueness: detected['Vague'].append(word)
-        if amb_check_res[1][1][0]==True:
-            subjectivity = amb_check_res[1][1][1]
-            for word in subjectivity: detected['Subjective'].append(word)
-        if amb_check_res[1][2][0]==True:
-            optionality = amb_check_res[1][2][1]
-            for word in optionality: detected['Optional'].append(word)
-        if amb_check_res[1][3][0]==True:
-            impliciteness = amb_check_res[1][3][1]
-            for word in impliciteness: detected['Implicit'].append(word)
-        if amb_check_res[0]==True:
-            ambiguity = 'YES'
-        if vrf_check_res[0]==False:
-            verifiability = 'NO due to ' + str(vrf_check_res[1])
-            for word in vrf_check_res[1]: detected['Non-Verifiable'].append(word)
-        if passive_check_res==True:
-            voice = 'Passive'
-            rec = recommend(sentence)
-            recommended[sentence] = rec
-        
-        if ambiguity!='NO' or verifiability!='YES' or voice=='Passive':
-            verdict = 0
-        final_res[sentence] = {
-            "vagueness": vagueness,
-            "subjectivity": subjectivity,
-            "optionality": optionality,
-            "implicitness": impliciteness,
-            "ambiguity": ambiguity,
-            "verifiability": verifiability,
-            "passive": voice,
-            "rec": rec,
-            "verdict": verdict
-        }
-
-        for key, value in detected.items():
-            value = set(value)
-        detected['Rec'] = recommended
-    
-    print('Requirements analysis complete.....')
-    return final_res, detected
-
-
 # Method to get the full path of the latest uploaded file
 def find_latest_pdf():
     files_list = os.listdir('media')
@@ -131,7 +68,6 @@ def read_pdf():
 
 # Method to annotate PDF as per the output of requirements analysis
 def annotate_pdf(detected, input_pdf_file_name):
-    print('Annotating in progress.....')
 
     reqs_doc = fitz.open(os.path.join('media', input_pdf_file_name+'.pdf'))
     
@@ -179,14 +115,12 @@ def annotate_pdf(detected, input_pdf_file_name):
     reqs_doc.save(annotated_pdf, garbage=3, deflate=True)
     reqs_doc.close()
     
-    print('Annotated PDF stored at: '+annotated_pdf)
+    print(f"[Checkpoint-----5]: Annotated PDF generated and stored at: [{annotated_pdf}]")
     return annotated_pdf
 
 
 # Method to write requirements analysis results as an Excel file
 def generate_excel(res, input_pdf_file_name):
-    print('Generating analysis report.....')
-
     wb_name = 'generated_workbooks\\'+input_pdf_file_name+'__reqs_analysis_report_'+datetime.now().strftime("%Y-%m-%d_%H-%M-%S")+'.xlsx'
     wb = xlsxwriter.Workbook(wb_name)
     ws = wb.add_worksheet()
@@ -222,7 +156,7 @@ def generate_excel(res, input_pdf_file_name):
         i = i+1
     
     wb.close()
-    print('Analysis report stored at: '+wb_name)
+    print(f"[Checkpoint-----4]: Excel report generated and stored at: [{wb_name}]")
     return wb_name
 
 
@@ -242,6 +176,8 @@ def input(request):
 
 def analyze_reqs(request):
     if request.method=="POST":
+        print("[Checkpoint-----0]: Requirements Analysis started.")
+
         text_content, pdf_content, content, input_pdf_file_name = '', None, '', ''
         text_content = request.POST["prompt"]
         try:
@@ -272,12 +208,17 @@ def analyze_reqs(request):
 
         sentences = re.split(r'\. |\? |! |\.|\?|!', content)
         sentences = sentences[0:len(sentences)-1]
-        print('Requirements content ready.....')
+        print('[Checkpoint-----1]: Requirements content ready.')
 
-        final_res, detected = analyze(sentences)
+        chunk_length = 10
+        sliced_input = [slice for slice in more_itertools.batched(sentences, chunk_length)]
+        print(f"[Checkpoint-----2]: Input sliced into {len(sliced_input)} data chunks. Each data chunk contains at max {chunk_length} sentences.")
+
+        final_res, detected = run_multi_proc(sliced_input)
         excel_url = generate_excel(final_res, input_pdf_file_name)
         annotated_pdf_url = ''
         if pdf_content!=None: annotated_pdf_url = annotate_pdf(detected, input_pdf_file_name)
+        print("[Checkpoint-----6]: Requirements Analysis completed successfully.")
 
         params_to_front_end = {
             "final_res": final_res,
